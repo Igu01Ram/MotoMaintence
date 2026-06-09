@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'data_access_object.dart';
-import 'item_manutencao.dart';
+import '../data/data_access_object.dart';
+import '../models/item_manutencao.dart';
 import 'tela_realizar_revisao.dart';
 
 class TelaSimulacao extends StatefulWidget {
@@ -118,9 +118,7 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
               _mostrandoAlerta = false;
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const TelaRealizarRevisao(),
-                ),
+                MaterialPageRoute(builder: (_) => const TelaRealizarRevisao()),
               );
             },
             child: const Text('Ir para Manutenção'),
@@ -141,12 +139,12 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
     super.dispose();
   }
 
-
   Map<String, dynamic>? get _proximoMarco {
     Map<String, dynamic>? proximo;
 
     for (final item in _itensComKm) {
-      final proximoKm = (((_kmTotal.toInt()) ~/ item.kmRevisao) + 1) * item.kmRevisao;
+      final proximoKm =
+          (((_kmTotal.toInt()) ~/ item.kmRevisao) + 1) * item.kmRevisao;
       if (proximo == null || proximoKm < (proximo['km'] as int)) {
         proximo = {'item': item, 'km': proximoKm};
       }
@@ -154,7 +152,6 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
 
     return proximo;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -173,19 +170,28 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Velocímetro ──
             Card(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Column(
                   children: [
-                    Icon(Icons.speed, size: 40, color: Theme.of(context).colorScheme.primary),
+                    Icon(
+                      Icons.speed,
+                      size: 40,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       '${_velocidade.toInt()} km/h',
-                      style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    const Text('Velocidade', style: TextStyle(color: Colors.grey)),
+                    const Text(
+                      'Velocidade',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   ],
                 ),
               ),
@@ -193,7 +199,6 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
 
             const SizedBox(height: 16),
 
-            // ── KM ──
             Row(
               children: [
                 Expanded(
@@ -206,9 +211,18 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
                           const SizedBox(height: 4),
                           Text(
                             '${_kmTotal.toInt()} km',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          Text('KM Total', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                          Text(
+                            'KM Total',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -225,9 +239,18 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
                           const SizedBox(height: 4),
                           Text(
                             '${_kmPercorrido.toInt()} km',
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          Text('Percorridos', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                          Text(
+                            'Percorridos',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -238,12 +261,14 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
 
             const SizedBox(height: 16),
 
-            // ── Próxima manutenção ──
             if (semItens)
               Card(
                 color: Colors.blue[50],
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
                   child: Row(
                     children: [
                       Icon(Icons.info_outline, color: Colors.blue[700]),
@@ -262,7 +287,10 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
               Card(
                 color: Colors.orange[50],
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
                   child: Row(
                     children: [
                       Icon(Icons.build_circle, color: Colors.orange[700]),
@@ -270,7 +298,10 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
                       Expanded(
                         child: Text(
                           'Próxima: ${proximoItem!.nome} em ${(proximoKm! - _kmTotal).toInt()} km',
-                          style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                            color: Colors.orange[800],
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -281,10 +312,16 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
               Card(
                 color: Colors.green[50],
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
                   child: Row(
                     children: [
-                      Icon(Icons.check_circle_outline, color: Colors.green[700]),
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.green[700],
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -299,7 +336,6 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
 
             const Spacer(),
 
-            // ── Botões ──
             Row(
               children: [
                 Expanded(
@@ -307,7 +343,10 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
                     'Freio',
                     Colors.red,
                     _freando,
-                    onDown: () => setState(() { _freando = true; _acelerando = false; }),
+                    onDown: () => setState(() {
+                      _freando = true;
+                      _acelerando = false;
+                    }),
                     onUp: () => setState(() => _freando = false),
                   ),
                 ),
@@ -317,7 +356,10 @@ class _TelaSimulacaoState extends State<TelaSimulacao> {
                     'Acelerar',
                     Colors.green,
                     _acelerando,
-                    onDown: () => setState(() { _acelerando = true; _freando = false; }),
+                    onDown: () => setState(() {
+                      _acelerando = true;
+                      _freando = false;
+                    }),
                     onUp: () => setState(() => _acelerando = false),
                   ),
                 ),

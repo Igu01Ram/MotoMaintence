@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'data_access_object.dart';
-import 'item_manutencao.dart';
+import '../data/data_access_object.dart';
+import '../models/item_manutencao.dart';
 import 'tela_historico.dart';
 
 class TelaRealizarRevisao extends StatefulWidget {
@@ -101,41 +101,70 @@ class _TelaRealizarRevisaoState extends State<TelaRealizarRevisao> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Realizar Revisão'),
+        title: const Text('Realizar Revisão', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
               itemCount: _itens.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final item = _itens[index];
+                final isSelected = _selecionados.contains(item.id);
 
-                return CheckboxListTile(
-                  title: Text(item.nome),
-                  value: _selecionados.contains(item.id),
-                  onChanged: (value) {
+                return InkWell(
+                  onTap: () {
                     setState(() {
-                      if (value == true) {
+                      if (!isSelected) {
                         _selecionados.add(item.id);
                       } else {
                         _selecionados.remove(item.id);
                       }
                     });
                   },
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.deepOrangeAccent.withValues(alpha: 0.1) : const Color(0xFF1E1E1E),
+                      border: Border.all(
+                        color: isSelected ? Colors.deepOrangeAccent : const Color(0xFF2C2C2C),
+                        width: isSelected ? 2 : 1,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: CheckboxListTile(
+                      activeColor: Colors.deepOrangeAccent,
+                      checkColor: Colors.white,
+                      title: Text(
+                        item.nome,
+                        style: TextStyle(
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                      value: isSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value == true) {
+                            _selecionados.add(item.id);
+                          } else {
+                            _selecionados.remove(item.id);
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 );
               },
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _finalizarRevisao,
-                icon: const Icon(Icons.check),
-                label: const Text('FINALIZAR REVISÃO'),
-              ),
+            padding: const EdgeInsets.all(24),
+            child: ElevatedButton.icon(
+              onPressed: _finalizarRevisao,
+              icon: const Icon(Icons.check_circle_outline),
+              label: const Text('FINALIZAR REVISÃO'),
             ),
           ),
         ],
